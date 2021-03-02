@@ -2,7 +2,7 @@
 *.class
 
 #config-stuff
-./Parabola/Parabola/config/
+Parabola/config/
 
 # Log file
 *.log
