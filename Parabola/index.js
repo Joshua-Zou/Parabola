@@ -46,12 +46,10 @@ require('nerdamer/Algebra.js');
 require('nerdamer/Calculus.js');
 require('nerdamer/Solve.js');
 const solver = require('@metadelta/solver');
-const YouTube = require("discord-youtube-api");
 const owoify = require('owoifyx');
 const imageSearch = require('image-search-google');
 const imageclient = new imageSearch('e6cc5b1f5d7a449a1', 'AIzaSyAocr3dqtcxAxMlDbj5LoBPTK8B1B8qSi8');
 const imageoptions = {page:1};
-const youtube = new YouTube("google api key");
 const queue = new Map();
 const fetch = require('node-fetch');
 var googlelink;
@@ -78,11 +76,11 @@ const Discord = discord;
 const client = new discord.Client({ disableMentions: 'everyone' });
 const {MongoClient} = require('mongodb')
 const { Player } = require('discord-player');
-const uri = "mongodb+srv://monkey:monkey2008@cluster0.exqqa.mongodb.net/test";
+client.config = require('./config/bot.js')
+const uri = client.config.mongodb;
 const mongoclient = new MongoClient(uri, {poolSize: 10, bufferMaxEntries: 0, useNewUrlParser: true,useUnifiedTopology: true});
 mongoclient.connect(async function(err, mongoclient){
 client.player = new Player(client);
-client.config = require('./config/bot.js')
 client.emotes = client.config.emojis;
 client.filters = client.config.filters;
 client.commands = new discord.Collection();

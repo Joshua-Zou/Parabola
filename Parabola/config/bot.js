@@ -14,4 +14,5 @@ module.exports = {
     },
 
     filters: ['8D', 'gate', 'haas', 'phaser', 'treble', 'tremolo', 'vibrato', 'reverse', 'karaoke', 'flanger', 'mcompand', 'pulsator', 'subboost', 'bassboost', 'vaporwave', 'nightcore', 'normalizer', 'surrounding'],
+    mongodb: "mongodb+srv://monkey:monkey2008@cluster0.exqqa.mongodb.net/test"
 };
