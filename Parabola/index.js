@@ -82,23 +82,7 @@ const uri = "mongodb+srv://monkey:monkey2008@cluster0.exqqa.mongodb.net/test";
 const mongoclient = new MongoClient(uri, {poolSize: 10, bufferMaxEntries: 0, useNewUrlParser: true,useUnifiedTopology: true});
 mongoclient.connect(async function(err, mongoclient){
 client.player = new Player(client);
-client.config = {
-    emojis: {
-        off: ':x:',
-        error: ':warning:',
-        queue: ':bar_chart:',
-        music: ':musical_note:',
-        success: ':white_check_mark:',
-    },
-
-    discord: {
-        token: 'Nzk0MDcwMTkxNjc5ODY0ODYy.X-1dfg.mY7HD3ooEA9pcChq9SykrVuAyWg',
-        prefix: '~',
-        activity: '@me to see my prefix',
-    },
-
-    filters: ['8D', 'gate', 'haas', 'phaser', 'treble', 'tremolo', 'vibrato', 'reverse', 'karaoke', 'flanger', 'mcompand', 'pulsator', 'subboost', 'bassboost', 'vaporwave', 'nightcore', 'normalizer', 'surrounding'],
-};
+client.config = require('./config/bot.js')
 client.emotes = client.config.emojis;
 client.filters = client.config.filters;
 client.commands = new discord.Collection();
