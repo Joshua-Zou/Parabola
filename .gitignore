@@ -1,9 +1,10 @@
 # Compiled class file
 *.class
 
-#config-stuff
-Parabola/config/
-
+#Config-stuff
+Parabola/config
+#Packages
+Parabola/node_modules
 # Log file
 *.log
 
