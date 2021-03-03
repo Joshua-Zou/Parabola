@@ -48,7 +48,6 @@ require('nerdamer/Solve.js');
 const solver = require('@metadelta/solver');
 const owoify = require('owoifyx');
 const imageSearch = require('image-search-google');
-const imageclient = new imageSearch('e6cc5b1f5d7a449a1', 'AIzaSyAocr3dqtcxAxMlDbj5LoBPTK8B1B8qSi8');
 const imageoptions = {page:1};
 const queue = new Map();
 const fetch = require('node-fetch');
@@ -65,7 +64,6 @@ var roasttest = ["No, I do not want to hear you play the ukulele.", "People alwa
 var rickroll = ["https://www.youtube.com/watch?v=6-HUgzYPm9g", "https://www.youtube.com/watch?v=G8iEMVr7GFg", "https://www.youtube.com/watch?v=AyOqGRjVtls", "https://www.youtube.com/watch?v=6mhmcwmgWbA&list=LLh0zI6HBoJh3w94SSuZs4Hg&index=160&t=0s", "https://www.youtube.com/watch?v=SpZ2FsEfwP4", "https://www.youtube.com/watch?v=H01BwSD9eyQ","https://www.youtube.com/watch?v=nrsnN23tmUA","https://www.youtube.com/watch?v=sO4wVSA9UPs","https://www.youtube.com/watch?v=rrs0B_LM898","https://www.youtube.com/watch?v=epyRUp0BhrA","https://www.youtube.com/watch?v=uK5WDo_3s7s","https://www.youtube.com/watch?v=wzSVOcgKq04&feature=emb_title"]
 var dbwords;
 var badwords;
-let testarray = ["lsdkfj","yes", "no", "maybe", "try", "asldfkj"]
 let banned = 0;
 var prefix = "~";
 var prefixlength = 1;
@@ -77,6 +75,7 @@ const client = new discord.Client({ disableMentions: 'everyone' });
 const {MongoClient} = require('mongodb')
 const { Player } = require('discord-player');
 client.config = require('./config/bot.js')
+const imageclient = new imageSearch(client.config.googleImage.token, client.config.googleImage.key);
 const uri = client.config.mongodb;
 const mongoclient = new MongoClient(uri, {poolSize: 10, bufferMaxEntries: 0, useNewUrlParser: true,useUnifiedTopology: true});
 mongoclient.connect(async function(err, mongoclient){
