@@ -229,26 +229,26 @@ client.on("message", message => {
              let currentnum = Number(currentnumstr);
              let goodnum = currentnum+1;
              let currentuserid = currentnumopbj.currentuser;
-             if (isnumber === goodnum){
-               let istrue = (userid.localeCompare(currentuserid));
-               if (istrue === 1||istrue === -1){
-               message.react("✅");
-      //put stuff here that updates stuff
-            updateDocumentSet(mongoclient, "counting", {number: goodnum, currentuser: userid});
-
-             }
-             else{
-               message.reply("You can't put two numbers in a row. Starting over, the next number I am looking for is 1.");
-               message.react("❌");
-               updateDocumentSet(mongoclient, "counting", {number: 0, currentuser: "xxxxxxxxxx"});
-               return;
-             }
-             }
-             else{
+             if (isnumber !== goodnum){
                message.react("❌");
                message.reply("starting over, the next number I am looking for is 1. Reminder: the same person can't type two numbers in a row");
                updateDocumentSet(mongoclient, "counting", {number: 0, currentuser: "xxxxxxxxxx"});
                return;
+             }
+             else{
+               let istrue = (userid.localeCompare(currentuserid));
+               if (istrue === 1||istrue === -1){
+               message.react("✅");
+               //put stuff here that updates stuff
+               updateDocumentSet(mongoclient, "counting", {number: goodnum, currentuser: userid});
+
+               }
+               else{
+               message.reply("You can't put two numbers in a row. Starting over, the next number I am looking for is 1.");
+               message.react("❌");
+               updateDocumentSet(mongoclient, "counting", {number: 0, currentuser: "xxxxxxxxxx"});
+               return;
+               }
              }
            }
          }
