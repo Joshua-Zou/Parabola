@@ -2,9 +2,9 @@
 *.class
 
 #Config-stuff
-Parabola/config
+/Parabola/config
 #Packages
-Parabola/node_modules
+/Parabola/node_modules
 # Log file
 *.log
 
