@@ -1223,9 +1223,13 @@ client.on("message", message => {
               //message.channel.send(`Found a listing in the collection with the name ${nameOfListing}`);
               let dbwords = JSON.parse(JSON.stringify(result));
                 for (var k = 0; k<100; k++){
-                  let noSpace1 = dbwords.badwords[k].replace(/\s+/g, '');
+                  let noSpace1 = message.content.toLowerCase().replace(/\s+/g, '');
                   let noSpace = noSpace1.replace(/\s+/g, '');
-                  if (noSpace.includes(dbwords.badwords[k])||message.content.toLowerCase().includes(dbwords.badwords[k])||message.content.toLowerCase().replace(/\s+/g, '').includes(noSpace)){
+                  //let dbSpace = dbwords.badwords[k].replace(/\s+/g, '');
+                  console.log(noSpace)
+                  console.log("___________________________________________________");
+                  console.log(message.content.toLowerCase().replace(/\s+/g, ''))
+                  if (noSpace.includes(dbwords.badwords[k])||message.content.toLowerCase().includes(dbwords.badwords[k])){
                     message.delete();
                     const uri = "mongodb+srv://monkey:monkey2008@cluster0.exqqa.mongodb.net/test";
                     const db = mongoclient.db("discordbot");
