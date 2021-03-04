@@ -343,6 +343,9 @@ client.on("message", message => {
               message.channel.send("you must input a word that is longer than 3 characters to blacklist");
               return;
             }
+            if (message.content.toLowerCase().includes("blacklist")||message.content.toLowerCase().includes("delist")){
+              message.channel.send("You can't blacklist commands like delist or blacklist")
+            }
             if (message.member.hasPermission('ADMINISTRATOR')){
 
             let proccesedwordx = message.content.toLowerCase().slice(9+prefixlength).trim().split();
@@ -524,9 +527,30 @@ client.on("message", message => {
     )
     message.channel.send(random)
   }
-  let stop = await findlistingbyname(mongoclient, "101");
-  if (stop === "stop"){
-    return;
+  if (message.content.toLowerCase() === prefix+"show blacklist"){
+    if (!message.member.hasPermission('ADMINISTRATOR')){
+      message.channel.send("you don't have enough perms");
+      return;
+    }
+    let result = await mongoclient.db("discordbot").collection(message.guild.id)
+    .findOne({ _id: "101"});
+    if (result){
+      let dbwords = JSON.parse(JSON.stringify(result));
+        local104();
+        async function local104(){
+
+        if (dbwords.badwords.length === 0){
+          message.channel.send("There are no words in the blacklist. To start blacklisting words, send: `"+prefix+"blacklist `word`");
+          return;
+        }else
+        message.channel.send("Sent it to you in your DM's");
+        let list = dbwords.badwords;
+        list = list.join('\n')
+      message.member.send(message.guild.name+"'s blacklist: \n"+ list);
+  }
+
+  }
+  else message.channel.send("There are no words in the blacklist. To start, send: " + prefix + "blacklist `word`.");
   }
   if(message.content.toLowerCase() === prefix+"clear blacklist"){
     if (message.member.hasPermission('ADMINISTRATOR')){
@@ -544,6 +568,10 @@ client.on("message", message => {
   else{
     message.channel.send("sorry, you don't have enough permissions to do this, please contact your administrator to run this commmand");
   }
+  }
+  let stop = await findlistingbyname(mongoclient, "101");
+  if (stop === "stop"){
+    return;
   }
   if(message.content.startsWith(prefix+"reward")){
     if (!message.member.hasPermission('ADMINISTRATOR')){
@@ -647,31 +675,6 @@ client.on("message", message => {
     let userid = message.author.id;
       findOneListingByName(mongoclient, userid, message.author.tag);
     }
-  if (message.content.toLowerCase() === prefix+"show blacklist"){
-    if (!message.member.hasPermission('ADMINISTRATOR')){
-      message.channel.send("you don't have enough perms");
-      return;
-    }
-    let result = await mongoclient.db("discordbot").collection(message.guild.id)
-    .findOne({ _id: "101"});
-    if (result){
-      let dbwords = JSON.parse(JSON.stringify(result));
-        local104();
-        async function local104(){
-
-        if (dbwords.badwords.length === 0){
-          message.channel.send("There are no words in the blacklist. To start blacklisting words, send: `"+prefix+"blacklist `word`");
-          return;
-        }else
-        message.channel.send("Sent it to you in your DM's");
-        let list = dbwords.badwords;
-        list = list.join('\n')
-      message.member.send(message.guild.name+"'s blacklist: \n"+ list);
-  }
-
-  }
-  else message.channel.send("There are no words in the blacklist. To start, send: " + prefix + "blacklist `word`.");
-  }
   if (message.content.startsWith(prefix+"change counting channel")){
     if (!message.member.hasPermission('ADMINISTRATOR')){
       message.channel.send("you don't have the perms to do this command");
@@ -1220,9 +1223,8 @@ client.on("message", message => {
               //message.channel.send(`Found a listing in the collection with the name ${nameOfListing}`);
               let dbwords = JSON.parse(JSON.stringify(result));
                 for (var k = 0; k<100; k++){
-                  let noSpace1 = message.content.toLowerCase().replace(/\s+/g, '');
+                  let noSpace1 = dbwords.badwords[k].replace(/\s+/g, '');
                   let noSpace = noSpace1.replace(/\s+/g, '');
-                  console.log(noSpace)
                   if (noSpace.includes(dbwords.badwords[k])||message.content.toLowerCase().includes(dbwords.badwords[k])||message.content.toLowerCase().replace(/\s+/g, '').includes(noSpace)){
                     message.delete();
                     const uri = "mongodb+srv://monkey:monkey2008@cluster0.exqqa.mongodb.net/test";
