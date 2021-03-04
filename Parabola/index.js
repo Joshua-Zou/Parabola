@@ -2205,12 +2205,10 @@ try{
       return;
     }
     var letters = /^[A-Za-z]+$/;
-  if(message.content.toLowerCase().match(letters))
-    {
+  if(!message.content.toLowerCase().includes("<@!")){
      return;
-    }
+   }
     let word2 = message.mentions.users.first().id;
-    console.log(word2)
     if (word2 === client.user.id && !message.content.toLowerCase().includes(prefix)){
     message.channel.send("my prefix is: "+prefix+"\n"+prefix+"help for help");
   }
