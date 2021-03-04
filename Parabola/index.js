@@ -620,6 +620,7 @@ client.on("message", message => {
           message.channel.send("Making "+url+" my new subreddit to pull random posts off of.");
           await updateDocumentSet(mongoclient, "counting", {memes: url});
           message.channel.send("Done.")
+          return;
         }
   }catch(err){
     message.channel.send(err.toString())
@@ -2292,8 +2293,7 @@ main();
     }
   }
 
-}
-)
+})
 client.on('messageDelete', async function(message, channel){
     let counting = await checkStuff(mongoclient, "counting");
     if (counting.channel === message.channel.name){
