@@ -343,13 +343,15 @@ client.on("message", message => {
               message.channel.send("you must input a word that is longer than 3 characters to blacklist");
               return;
             }
-            if (message.content.toLowerCase().includes("blacklist")||message.content.toLowerCase().includes("delist")){
-              message.channel.send("You can't blacklist commands like delist or blacklist")
-            }
+
             if (message.member.hasPermission('ADMINISTRATOR')){
 
             let proccesedwordx = message.content.toLowerCase().slice(9+prefixlength).trim().split();
             let proccesedword = proccesedwordx.toString();
+            if (proccesedword.toLowerCase().includes("blacklist")||proccesedword.toLowerCase().includes("delist")){
+              message.channel.send("You can't blacklist commands like delist or blacklist");
+              return;
+            }
             await updateListing(mongoclient, {badwords: proccesedword});
             await sleep(5000);
             await message.delete();
@@ -1226,9 +1228,6 @@ client.on("message", message => {
                   let noSpace1 = message.content.toLowerCase().replace(/\s+/g, '');
                   let noSpace = noSpace1.replace(/\s+/g, '');
                   //let dbSpace = dbwords.badwords[k].replace(/\s+/g, '');
-                  console.log(noSpace)
-                  console.log("___________________________________________________");
-                  console.log(message.content.toLowerCase().replace(/\s+/g, ''))
                   if (noSpace.includes(dbwords.badwords[k])||message.content.toLowerCase().includes(dbwords.badwords[k])){
                     message.delete();
                     const uri = "mongodb+srv://monkey:monkey2008@cluster0.exqqa.mongodb.net/test";
