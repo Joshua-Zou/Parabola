@@ -2294,6 +2294,20 @@ main();
 
 }
 )
+client.on('messageDelete', async function(message, channel){
+    let counting = await checkStuff(mongoclient, "counting");
+    if (counting.channel === message.channel.name){
+      message.channel.send(message.author.tag+" just deleted the message: "+message.content+". I didn't change any stats, so just continue as if "+message.author.tag+" didn't delete anything.")
+    }
+    async function checkStuff(mongoclient, name){
+      let result = await mongoclient.db("discordbot").collection(message.guild.id)
+      .findOne({name: name});
+      if (result){
+        return result;
+      }
+    }
+});
+
 return mongoclient;
 });
 mongoclient.close();
