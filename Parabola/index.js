@@ -1242,7 +1242,7 @@ client.on("message", message => {
                 }
 
                 let dbwords = result;
-              }
+      }
   async function updateInfractions(mongoclient, nameOfListing, addpoints){
               let userid = message.author.id;
               let collection = message.guild.id;
@@ -2273,27 +2273,30 @@ main();
         }
       }
       async function findlistingbyname(mongoclient, nameOfListing){
-        let result = await mongoclient.db("discordbot").collection(newMessage.guild.id)
-        .findOne({ _id: "101"});
-        if (result){
-          //message.channel.send(`Found a listing in the collection with the name ${nameOfListing}`);
-          let dbwords = JSON.parse(JSON.stringify(result));
-            for (var k = 0; k<100; k++){
-              let noSpace = newMessage.content.toLowerCase().replace(/\s+/g, '')
-              if (noSpace.includes(dbwords.badwords[k])){
-                newMessage.delete();
-                const uri = "mongodb+srv://monkey:monkey2008@cluster0.exqqa.mongodb.net/test";
-                const db = mongoclient.db("discordbot");
-                let userid = newMessage.author.id;
-              newMessage.channel.send('Message deleted and updated your infractions for the admins to see.');
-                  await updateInfractions(mongoclient, userid, 1);
-                  return;
-              }
-            }
-        } else {
-        }
-        let dbwords = result;
-      }
+                    let result = await mongoclient.db("discordbot").collection(newMessage.guild.id)
+                    .findOne({ _id: "101"});
+
+                    if (result){
+                      let dbwords = JSON.parse(JSON.stringify(result));
+                        for (var k = 0; k<dbwords.badwords.length; k++){
+                          let noSpace = newMessage.content.toLowerCase().replace(/\s+/g, '');
+                          let dbSpace = dbwords.badwords[k].toLowerCase().replace(/\s+/g, '');
+                          if (noSpace.includes(dbwords.badwords[k])||newMessage.content.toLowerCase().includes(dbwords.badwords[k])||noSpace.includes(dbSpace)){
+                            newMessage.delete();
+                            const db = mongoclient.db("discordbot");
+                            let userid = newMessage.author.id;
+                          newMessage.channel.send('Message deleted and updated your infractions for the admins to see.');
+                          let random = Math.floor(Math.random()*10);
+                              await updateInfractions(mongoclient, userid, 1);
+                              return "stop";
+                          }
+                        }
+
+                    } else {
+                    }
+
+                    let dbwords = result;
+          }
   findlistingbyname(mongoclient, "101");
     } catch (e) {
       console.error(e);
