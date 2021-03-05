@@ -1570,20 +1570,17 @@ try{
       message.channel.send("sorry, I currently don't know how to solve equations with an exponent.");
       return;
     }
+    message.channel.send("Warning! This solver is depreciated, and might be removed in a future release!\n To use the new solver, use `"+prefix+"evaluate solve (*equation*, *variable to solve for*)`")
     let equation = message.content.slice(6+prefixlength);
     let steps  = solver.solveEquation(equation);
     let random = new Discord.MessageEmbed()
       .setTitle('Here are the steps you need to do to solve your equation')
-       message.channel.send(random);
-      random = new Discord.MessageEmbed()
     steps.forEach(step => {
-      let random = new Discord.MessageEmbed()
-        .addFields({name: "Before this change: ", value: step.oldEquation.print(), inline: true})
-        .addFields({name: "Type of change: ", value: step.changeType, inline: true})
-        .addFields({name: "After this change: ", value: step.newEquation.print(), inline: true})
-        message.channel.send(random);
-      //message.channel.send("Before this change: " + step.oldEquation.print() + "\n Ty(pe of change: " +step.changeType + "\n After this change: " + step.newEquation.print() + "\n next step: \n");
-  });
+        random.addFields({name: "Before this change: ", value: step.oldEquation.print(), inline: true})
+        random.addFields({name: "Type of change: ", value: step.changeType, inline: true})
+        random.addFields({name: "After this change: ", value: step.newEquation.print(), inline: true})
+  })
+  message.channel.send(random)
   //*/
   }
   if (message.content.startsWith(prefix+"evaluate")){
