@@ -575,7 +575,7 @@ client.on("message", message => {
   if (stop === "stop"){
     return;
   }
-  if(message.content.startsWith(prefix+"reward")){
+  if (message.content.startsWith(prefix+"reward")){
     if (!message.member.hasPermission('ADMINISTRATOR')){
       message.channel.send("you don't have enough perms to do this command");
       return;
@@ -586,8 +586,8 @@ client.on("message", message => {
       message.channel.send("you can't give yourself points");
       return;
     }
-    await findlisting(mongoclient, userid);
-    if (exists === 0){
+    let exists = await findlisting(mongoclient, userid);
+    if (exists === "stop"){
       return;
     }
     message.channel.send("now input the number of points you want to reward that person.");
@@ -1267,8 +1267,8 @@ client.on("message", message => {
           let realpoints = authorpoints.points;
         }
         else {
-          exists = 0;
-          message.channel.send("the person you specified either doesn't have an acount yet, or you entered the id wrong.")
+          message.channel.send("the person you specified either doesn't have an acount yet, or you entered the id wrong.");
+          return "stop"
         }
       }
   async function signup(mongoclient){
