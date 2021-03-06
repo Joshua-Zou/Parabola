@@ -636,6 +636,11 @@ client.on("message", message => {
     }
 
     let url = await selReddit();
+    if (url === "none"){
+      message.channel.send("Ok, I will disable this feature!");
+      await updateDocumentSet(mongoclient, "counting", {memes: "none"});
+      return;
+    }
     let urll = "https://api.pushshift.io/reddit/search/submission/?subreddit="+url+"&sort=desc&sort_type=created_utc&size=1000";
     message.channel.send("Validating subreddit...")
     request(urll, async function (error, response, body) {
@@ -662,7 +667,7 @@ client.on("message", message => {
         .setTitle("Enter the subreddit's name (without the `r/` )")
         .setColor('#18492a')
         .setDescription("For example, enter:\ndankmemes\ncleanmemes\n No spaces please.")
-        .setFooter("As long as the subreddit meets the criteria of at least one post a day, it will be valid.")
+        .setFooter("As long as the subreddit meets the criteria of at least one post a day, it will be valid. If you want to disable this feature, type `none`")
       message.channel.send(settings);
         message.channel.awaitMessages(m => m.author.id === message.author.id,
         {max: 1, time: 30000}).then(collected => {
@@ -999,6 +1004,7 @@ client.on("message", message => {
       subreddit = "cleanmemes";
       await updateDocumentSet(mongoclient, "counting", {memes: "cleanmemes"})
     }else subreddit = counting.memes
+    if (subreddit === "none") return;
     const millis = Date.now();
     let currentDate = Math.floor(millis / 1000)
     let dateAgo = (Math.floor(currentDate)-2592000);
