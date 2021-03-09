@@ -1448,7 +1448,7 @@ client.on("message", message => {
     "bye": "bye boi",
     "light theme": "https://media.discordapp.net/attachments/722953585217896560/754876761833209916/image0.gif",
     "help meth":"don't do drugs kids",
-    "no u": "https://cdn.discordapp.com/attachments/805668666468728842/807826746371735602/no_u.jpg"
+    "no u": "https://i.imgur.com/8GPN9I3.jpg"
   };
   if(responseObject[message.content.toLowerCase().slice(prefixlength)]&&message.content.startsWith(prefix)){
       message.channel.send(responseObject[message.content.toLowerCase().slice(prefixlength)]);
