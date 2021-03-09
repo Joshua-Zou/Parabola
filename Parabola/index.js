@@ -1563,14 +1563,6 @@ try{
     let owo = message.content.toLowerCase().slice(7+prefixlength);
     message.channel.send(owoify(owo));
   }
-  if (message.content.startsWith(prefix+"find pretty image")){
-    let searchquery = message.content.toLowerCase().slice(19);
-    unsplash(searchquery);
-  }
-  if (message.content.startsWith(prefix+"find image")){
-    let searchname = message.content.slice(11+prefixlength);
-    findimage(searchname);
-  }
   if (message.content.startsWith(prefix+"solve")){
     if (message.content.toLowerCase().includes("^")){
       message.channel.send("sorry, I currently don't know how to solve equations with an exponent.");
@@ -1677,7 +1669,6 @@ try{
         { name: prefix+'light theme', value: 'tortures light theme users', inline: true },
         { name: prefix+'gimme nitro', value: 'attemts to give you nitro', inline: true },
         { name: prefix+'owoify', value: prefix+'owoify [sentence], owoifies a sentence', inline: true },
-        { name: prefix+'find image', value: prefix+'find image [image you want to google]', inline: true},
         { name: prefix+'urban', value: 'searches the urban dictionary for words (this is currently `'+urbanfunction +'` by your admin).', inline: true},
         { name: prefix+'meme', value: 'randomly gets a post from the set subreddit.', inline: true},
     	)
