@@ -1,5 +1,5 @@
 
-const version = "1.9.101";
+const version = "1.9.12";
 var colors = require("colors")
 const chrono = require('chrono-node');
 var request = require('request');
