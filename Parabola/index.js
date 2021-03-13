@@ -1,4 +1,4 @@
-
+2
 const version = "1.9.12";
 var colors = require("colors")
 const chrono = require('chrono-node');
@@ -448,6 +448,7 @@ client.on("message", message => {
   let lastchar = message.content.slice(length1-1);
   var goodprefix = "~";
     let badprefix = message.content.slice(14+prefixlength);
+    badprefix = badprefix.trim()
     if (badprefix.length === 0){
       message.channel.send("the prefix must be one or more characters");
       return;
@@ -689,6 +690,11 @@ client.on("message", message => {
     }
       let xchannel = message.content.slice(24+prefixlength);
       let guild = message.guild;
+      if (xchannel === "none"){
+        message.channel.send("Ok! I will disable this feature. You can re-enable it by doing the same command")
+        updateDocumentSet(mongoclient, "counting", {channel: "hellas;dlfkjas;dlkvha;eruvn;aieval;eirulaseiruvbli"});
+        return;
+      }
       let x = guild.channels.cache.filter(chx => chx.type === "text").find(r => r.name === xchannel);
       if (x === undefined){
         message.channel.send("that is not a valid text channel.");
