@@ -1,0 +1,11 @@
+---
+application:
+  name: "parabola"
+  project: "Parabola"
+  organization: "QoveryCommunity"
+routers:
+- name: "main-parabola"
+  routes:
+  - application_name: "parabola"
+    paths:
+    - "/*"
