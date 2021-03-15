@@ -132,6 +132,7 @@ client.on("message", message => {
           let random = new Discord.MessageEmbed()
             .setColor('#18492a')
             .setTitle("help admin menu")
+            .addFields({name: "Online dashboard", value: "[click me!](https://www.parabola-dashboard.tk/)"})
             .addFields(
         		{ name: prefix+'blacklist [word]', value:'blacklists the specified word, and makes it so censor bot will delete the *entire* message if it detects a message containing a blacklisted word', inline: true },
             { name: prefix+'delist [word]', value: 'delists the specified word', inline: true },
