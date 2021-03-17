@@ -1,4 +1,3 @@
-2
 const version = "1.9.12";
 var colors = require("colors")
 const chrono = require('chrono-node');
@@ -47,8 +46,6 @@ require('nerdamer/Calculus.js');
 require('nerdamer/Solve.js');
 const solver = require('@metadelta/solver');
 const owoify = require('owoifyx');
-const imageSearch = require('image-search-google');
-const imageoptions = {page:1};
 const queue = new Map();
 const fetch = require('node-fetch');
 var googlelink;
@@ -58,7 +55,6 @@ var prettylink;
 var personality;
 var urbanfunction = "disabled";
 var vent;
-const {createApi} = require('unsplash-js');
 let condition = "yes"
 var roasttest = ["No, I do not want to hear you play the ukulele.", "People always say I have no friends, but that’s not true. Every person I’ve asked out wants to be friends.", "Taking care of plants is not a suitable replacement for having friends, but I think you’re gonna need more plants.","You look like an 'after' photo when Sadness from Inside Out went in for rehab.\nhttps://tenor.com/view/blue-cry-sad-bad-day-gif-5337197","You are only asking for friends so you can finish your thesis on 'the Patriarchy.'", "I’ve always been told I had no friends The 12 voices in my head disagree", "What do you call a 23 year old guy with no friends, depression, social anxiety and no job? An average redditor"];
 var rickroll = ["https://www.youtube.com/watch?v=6-HUgzYPm9g", "https://www.youtube.com/watch?v=G8iEMVr7GFg", "https://www.youtube.com/watch?v=AyOqGRjVtls", "https://www.youtube.com/watch?v=6mhmcwmgWbA&list=LLh0zI6HBoJh3w94SSuZs4Hg&index=160&t=0s", "https://www.youtube.com/watch?v=SpZ2FsEfwP4", "https://www.youtube.com/watch?v=H01BwSD9eyQ","https://www.youtube.com/watch?v=nrsnN23tmUA","https://www.youtube.com/watch?v=sO4wVSA9UPs","https://www.youtube.com/watch?v=rrs0B_LM898","https://www.youtube.com/watch?v=epyRUp0BhrA","https://www.youtube.com/watch?v=uK5WDo_3s7s","https://www.youtube.com/watch?v=wzSVOcgKq04&feature=emb_title"]
@@ -75,7 +71,6 @@ const client = new discord.Client({ disableMentions: 'everyone' });
 const {MongoClient} = require('mongodb')
 const { Player } = require('discord-player');
 client.config = require('./config/bot.js')
-const imageclient = new imageSearch(client.config.googleImage.token, client.config.googleImage.key);
 const uri = client.config.mongodb;
 const mongoclient = new MongoClient(uri, {poolSize: 10, bufferMaxEntries: 0, useNewUrlParser: true,useUnifiedTopology: true});
 mongoclient.connect(async function(err, mongoclient){
@@ -115,7 +110,7 @@ client.once('ready', () => {
   client.user.setActivity(client.config.discord.activity);
 })
 client.on("message", message => {
-  if (message.author.bot || message.channel.type === 'dm') return;
+  if (message.author.bot || message.channel.type === 'dm' || message.content.length <3) return;
   if (message.content.toLowerCase().includes("undefined") || message.content.toLowerCase().includes("'undefined'") || message.content.toLowerCase().includes('"undefined"')) return;
 
   test3().catch(console.error);
@@ -1375,11 +1370,6 @@ client.on("message", message => {
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
-  async function findimage(searchquery){
-          let testx = await imageclient.search(searchquery, imageoptions);
-          googlelink = testx[0].thumbnail;
-          message.channel.send(googlelink);
-  }
   async function buffer(rotations){
         let msg = await message.channel.send("|");
       for(var x = 0; x<rotations; x++){
@@ -1455,7 +1445,8 @@ client.on("message", message => {
     "bye": "bye boi",
     "light theme": "https://media.discordapp.net/attachments/722953585217896560/754876761833209916/image0.gif",
     "help meth":"don't do drugs kids",
-    "no u": "https://i.imgur.com/8GPN9I3.jpg"
+    "no u": "https://i.imgur.com/8GPN9I3.jpg",
+    "invite":"<https://discord.com/oauth2/authorize?client_id=777732217857376259&permissions=8&redirect_uri=https%3A%2F%2Fgmail.com&scope=bot>"
   };
   if(responseObject[message.content.toLowerCase().slice(prefixlength)]&&message.content.startsWith(prefix)){
       message.channel.send(responseObject[message.content.toLowerCase().slice(prefixlength)]);
@@ -2222,30 +2213,7 @@ try{
     message.channel.send("my prefix is: "+prefix+"\n"+prefix+"help for help");
   }
   }
-  
-  async function unsplash(searchquery){
-    const unsplash = createApi({ accessKey: 'KBPBdezF2mXuMn1zD-cHJ_VcPBUZzgEg35pY3PULdaU' });
-  unsplash.search.getPhotos({
-    query: searchquery,
-    page: 1,
-    perPage: 1,
-    color: 'green',
-    orientation: 'portrait',
-  }).then(result =>{
-    if (result.errors){
-      console.log("errors occurred".error);
-    }
-    else{
-      let photo = result.response.results[0];
-      if (photo === undefined){
-        message.channel.send("couldn't find an image of that in the unsplash database");
-        return;
-      }
-      let photolink = photo.urls.raw;
-      message.channel.send(photolink);
-    }
-  })
-  }
+
   banned = 0;
         } catch (e) {
           console.error(e.warn);
