@@ -631,8 +631,16 @@ client.on("message", message => {
       message.channel.send("You don't have enough permissions.");
       return;
     }
-
+for (var x = 0; x<5; x++){
+  if (x === 3){
+    message.channel.send("Too many failed attempts! Please retype the command.");
+    return;
+  }
     let url = await selReddit();
+    if (url === "cancel"){
+      message.channel.send("Canceled. Nothing was changed.");
+      return;
+    }
     if (url === "none"){
       message.channel.send("Ok, I will disable this feature!");
       await updateDocumentSet(mongoclient, "counting", {memes: "none"});
@@ -640,14 +648,16 @@ client.on("message", message => {
     }
     let urll = "https://api.pushshift.io/reddit/search/submission/?subreddit="+url+"&sort=desc&sort_type=created_utc&size=1000";
     message.channel.send("Validating subreddit...")
-    request(urll, async function (error, response, body) {
+    var status = "hi";
+    await request(urll, async function (error, response, body) {
       if (err) console.error(err)
       try{
         let page = JSON.parse(body)
         let number = Math.floor(Math.random() * Math.floor(page.data.length));
         if (page.data.length === 0){
-          message.channel.send("I don't think that subreddit exists, please try again.")
-          return;
+          message.channel.send("I don't think that subreddit exists, please try again.");
+          status = "again";
+          return "again";
         }else{
           message.channel.send("Making "+url+" my new subreddit to pull random posts off of.");
           await updateDocumentSet(mongoclient, "counting", {memes: url});
@@ -657,14 +667,21 @@ client.on("message", message => {
   }catch(err){
     message.channel.send(err.toString())
   }
-    })
+})
+    await sleep(1000)
+    if (status === "again"){
+      continue;
+    }else{
+      return;
+    }
+  }
     function selReddit(){
       return new Promise(resolve => {
         let settings = new Discord.MessageEmbed()
         .setTitle("Enter the subreddit's name (without the `r/` )")
         .setColor('#18492a')
         .setDescription("For example, enter:\ndankmemes\ncleanmemes\n No spaces please.")
-        .setFooter("As long as the subreddit meets the criteria of at least one post a day, it will be valid. If you want to disable this feature, type `none`")
+        .setFooter("As long as the subreddit meets the criteria of at least one post a day, it will be valid. If you want to disable this feature, type `none`. To cancel type 'cancel'")
       message.channel.send(settings);
         message.channel.awaitMessages(m => m.author.id === message.author.id,
         {max: 1, time: 30000}).then(collected => {
@@ -1085,36 +1102,62 @@ client.on("message", message => {
       return;
     }
     var mode;
+    for (var x = 0; x<5; x++){
+      if (x === 3){
+        message.channel.send("Too many failed attempts, please retype the command!");
+        return;
+      }
     let option = await selOption();
+    if (option === "cancel"){
+      message.channel.send("Canceled.");
+      return;
+    }
     if (option === "restart"){
-      message.channel.send("That isn't an option, please restart.");
+      message.channel.send("That isn't an option, enter a valid number");
+      continue;
+    }else if (option === "1"){ mode = "kick"; break}
+    else if (option === "2"){ mode = "ban"; break}
+
+  }
+  for (var x = 0; x<5; x++){
+    if (x === 3){
+      message.channel.send("Too many failed attempts, please retype the command!");
       return;
-    }else if (option === "1") mode = "kick"
-    else if (option === "2") mode = "ban"
+    }
     let number = await selInfractions();
-    if (number === "restart"){
-      message.channel.send("That wasn't a valid number. Please restart the process.");
+    if (number === "cancel"){
+      message.channel.send("Canceled. Nothing was changed.");
       return;
-    }else if (number === "none") number = "none"
+    }
+    if (number === "restart"){
+      message.channel.send("That wasn't a valid number. Please enter a valid number");
+      continue;
+    }else if (number === "none"){ number = "none"; message.channel.send("Ok, I will now automatically "+mode+" a user when they reach "+ number+" infractions."); return;}
     if (mode === "kick"){
       updateDocumentSet(mongoclient, "counting", {kick: number}, message);
+      message.channel.send("Ok, I will now automatically "+mode+" a user when they reach "+ number+" infractions.");
+      return;
     }else if (mode === "ban"){
       updateDocumentSet(mongoclient, "counting", {ban: number}, message);
+      message.channel.send("Ok, I will now automatically "+mode+" a user when they reach "+ number+" infractions.");
+      return;
     }
-    message.channel.send("Ok, I will now automatically "+mode+" a user when they reach "+ number+" infractions.")
+
+  }
     function selOption(){
       return new Promise(resolve => {
         let settings = new Discord.MessageEmbed()
         .setTitle("Select which option you want to change.")
         .setColor('#18492a')
         .setDescription("1. Auto kicks\n2. Auto bans")
-        .setFooter("Input 1 or 2")
+        .setFooter("Input 1, 2 or cancel to cancel")
       message.channel.send(settings);
         message.channel.awaitMessages(m => m.author.id === message.author.id,
         {max: 1, time: 30000}).then(collected => {
           if (collected.first().content === "1"||collected.first().content === "2"){
           resolve(collected.first().content);
-        }else resolve("restart")
+        }else if(collected.first().content.toLowerCase() === "cancel") resolve("cancel")
+        else resolve("restart")
         }).catch(() => {
         message.channel.send('No answer after 30 seconds, operation canceled.');
         });
@@ -1126,12 +1169,14 @@ client.on("message", message => {
         .setTitle("Set the threshold of infractions for banning/kicking a user.")
         .setColor('#18492a')
         .setDescription("Enter a number between 2 and 1000")
-        .setFooter("If you want to set to never ban/kick based off of infractions, enter 'none'.")
+        .setFooter("If you want to set to never ban/kick based off of infractions, enter 'none'. Type 'cancel' to cancel")
       message.channel.send(embed);
         message.channel.awaitMessages(m => m.author.id === message.author.id,
         {max: 1, time: 30000}).then(collected => {
           if (collected.first().content.toLowerCase() === "none"){
             resolve("none")
+          }else if (collected.first().content.toLowerCase() === "cancel"){
+            resolve("cancel")
           }else if (Number(collected.first().content).toString().toLowerCase() === "nan"){
             resolve("restart");
           }else if (Number(collected.first().content)>1000){
