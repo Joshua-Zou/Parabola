@@ -705,9 +705,29 @@ client.on("message", message => {
     if (urbanfunction === "disabled"){
       return;
     }
-      let result = await urban(message.content.slice(6+prefixlength))
+    var result;
+    try{
+      result = await urban(message.content.slice(6+prefixlength))
+    }catch(err){
+      message.channel.send("I couldn't find a result for that in the Urban Dictionary!");
+    }
+      if (!result || result === undefined){
+        return;
+      }
+      if (!result.author || result.author === ""){
+        result.author = "none listed"
+      }
+      if (!result.example || result.example === ""){
+        result.example = "none given"
+      }
+      if (!result.thumbsUp || result.thumbsUp === ""){
+        result.thumbsUp = "0"
+      }
+      if (!result.thumbsDown || result.thumbsDown === ""){
+        result.thumbsDown = "0"
+      }
       let random = new Discord.MessageEmbed()
-      .setTitle("Urban Dictonary search for: "+result.word)
+      .setTitle("Urban Dictionary search for: "+result.word)
       .setColor("#2c965c")
         .addFields({name: "Definition: ", value: result.definition, inline: true})
         .addFields({name: "Example: ", value: result.example, inline: true})
