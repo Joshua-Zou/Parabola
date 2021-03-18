@@ -110,7 +110,7 @@ client.once('ready', () => {
   client.user.setActivity(client.config.discord.activity);
 })
 client.on("message", message => {
-  if (message.author.bot || message.channel.type === 'dm' || message.content.length <3) return;
+  if (message.author.bot || message.channel.type === 'dm') return;
   if (message.content.toLowerCase().includes("undefined") || message.content.toLowerCase().includes("'undefined'") || message.content.toLowerCase().includes('"undefined"')) return;
 
   test3().catch(console.error);
