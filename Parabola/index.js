@@ -191,7 +191,8 @@ var disabledChannels;
             name: "counting",
             number: 0,
             currentuser: "xxxxxxxxx",
-            memes: "cleanmemes"
+            memes: "cleanmemes",
+            translate: "enabled"
           })
           if ((message.guild.channels.cache.find(c => c.name.toLowerCase() === "real-counting"))) {
           }
@@ -747,6 +748,16 @@ for (var x = 0; x<5; x++){
     updateDocumentSet(mongoclient, "counting", {urban: "enabled"});
     message.channel.send("Done!")
   }
+  if (message.content.toLowerCase() === prefix+"disable translate"){
+  if (!message.member.hasPermission('ADMINISTRATOR')) return;
+    updateDocumentSet(mongoclient, "counting", {translate: "disabled"});
+    message.channel.send("Done!")
+  }
+  if (message.content.toLowerCase() === prefix+"enable translate"){
+  if (!message.member.hasPermission('ADMINISTRATOR')) return;
+    updateDocumentSet(mongoclient, "counting", {translate: "enabled"});
+    message.channel.send("Done!")
+  }
   if (message.content.startsWith(prefix+"suggest")){
     let suggestion = message.content.slice(prefixlength+7)
     if ((message.guild.channels.cache.find(c => c.name.toLowerCase() === "suggestions"))) {
@@ -1253,6 +1264,10 @@ try{
      }else message.channel.send("you have to mention someone to kick!");
   }
   if (message.content.toLowerCase().startsWith(prefix+"translate")){
+    if (!everything.translate){
+      everything.translate = "enabled"
+    }
+    if (everything.translate === "disabled") return;
     let countrycode = message.content.toLowerCase().slice(10+prefixlength,12+prefixlength);
     if (countrycode === "zh"){
       countrycode = "zh-CN";
