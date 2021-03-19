@@ -206,6 +206,10 @@ var disabledChannels;
         countingchannel = counting.channel;
       }
       if (message.channel.name === countingchannel){
+        let stop = await findlistingbyname(mongoclient, "101");
+        if (stop === "stop"){
+          return;
+        }
         var value;
          let isnumber = Number(message.content.toLowerCase());
          let userid = message.author.id;
@@ -2028,8 +2032,34 @@ main();
 client.on('messageDelete', async function(message, channel){
     let counting = await checkStuff(mongoclient, "counting");
     if (counting.channel === message.channel.name){
+      let stop = await findlistingbyname(mongoclient, "101");
+      if (stop === "stop"){
+        return;
+      }
       message.channel.send(message.author.tag+" just deleted the message: "+message.content+". I didn't change any stats, so just continue as if "+message.author.tag+" didn't delete anything.")
     }
+    async function findlistingbyname(mongoclient, nameOfListing){
+                  let result = await mongoclient.db("discordbot").collection(message.guild.id)
+                  .findOne({ _id: "101"});
+
+                  if (result){
+                    let dbwords = JSON.parse(JSON.stringify(result));
+                      for (var k = 0; k<dbwords.badwords.length; k++){
+                        let noSpace = message.content.toLowerCase().replace(/\s+/g, '');
+                        let dbSpace = dbwords.badwords[k].toLowerCase().replace(/\s+/g, '');
+                        if (noSpace.includes(dbwords.badwords[k])||message.content.toLowerCase().includes(dbwords.badwords[k])||noSpace.includes(dbSpace)){
+                          const db = mongoclient.db("discordbot");
+                          let userid = message.author.id;
+                        let random = Math.floor(Math.random()*10);
+                            return "stop";
+                        }
+                      }
+
+                  } else {
+                  }
+
+                  let dbwords = result;
+        }
     async function checkStuff(mongoclient, name){
       let result = await mongoclient.db("discordbot").collection(message.guild.id)
       .findOne({name: name});
