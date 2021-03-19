@@ -116,7 +116,6 @@ client.on("message", message => {
   test3().catch(console.error);
 
 
-  ////////start of normal checkStuff
 
   async function test3(){
   await main().catch(console.error);
@@ -169,12 +168,15 @@ client.on("message", message => {
       }
   async function main(){
   try {
+var everything = await checkStuff(mongoclient, "counting");
+var blacklist;
+var disabledChannels;
 
     if (err) console.log(err);
 
   const db = mongoclient.db("discordbot");
   if (message){
-      let counting = await checkStuff(mongoclient, "counting");
+      let counting = everything;
       var countingchannel;
       if (countingchannel === undefined){
         let userid = message.author.id;
@@ -251,7 +253,7 @@ client.on("message", message => {
         }
     }
   if (message){
-    let counting = await checkStuff(mongoclient, "counting");
+    let counting = everything;
 
     //signup server stuff
     let serverid = message.guild.id;
@@ -414,7 +416,6 @@ client.on("message", message => {
             let word2 = message.mentions.users.first().id;
             //message.channel.send(word2)
             await findOneListingByName(mongoclient, word2, message.mentions.users.first().tag);
-            //const user = mongoclient.users.get("741793729509064704"); // Getting the user by ID.
             //message.channel.send(user);
 
           }
@@ -494,7 +495,7 @@ client.on("message", message => {
     message.channel.send('Done');
   }
   if (message.content.toLowerCase() === prefix+"show settings"){
-    let info = await checkStuff(mongoclient, "counting");
+    let info = everything;
     var tts;
     var conf;
     var kicks;
@@ -1038,7 +1039,7 @@ for (var x = 0; x<5; x++){
   message.delete();
   }
   if (message.content.toLowerCase() === prefix+"meme"){
-    let counting = await checkStuff(mongoclient, "counting");
+    let counting = everything;
     if (!counting.memes){
       subreddit = "cleanmemes";
       await updateDocumentSet(mongoclient, "counting", {memes: "cleanmemes"})
@@ -1242,20 +1243,8 @@ for (var x = 0; x<5; x++){
       }
     }
   async function updatePoints(mongoclient, nameOfListing, addpoints){
-
-      let collection = message.guild.id;
-      let result = await mongoclient.db("discordbot").collection(message.guild.id)
-      .findOne({ name: nameOfListing});
-      if (result){
-        let lookup = JSON.parse(JSON.stringify(result));
-        let numofpoints = lookup.points;
-        let x = Number(numofpoints);
-        let updatepoints = x + addpoints;
-
         result = await mongoclient.db("discordbot").collection(message.guild.id)
-        .updateOne({ name: nameOfListing}, {$set: {points: updatepoints}})
-      }
-
+        .updateOne({name: nameOfListing}, { $inc: {points: addpoints}})
     }
   async function clearInfractions(mongoclient, name, updatedlisting){
       let result = await mongoclient.db("discordbot").collection(message.guild.id)
@@ -1281,11 +1270,6 @@ for (var x = 0; x<5; x++){
        .updateOne({ name: "restrictions"}, {$pull: updatedlisting});
        message.channel.send("done");
      }
-  async function listDatabases(mongoclient){
-        let databasesList = await mongoclient.db().admin().listDatabases();
-        message.channel.send("Databases: ");
-        databasesList.databases.forEach(db => message.channel.send(` - ${db.name}`))
-      }
   async function createListing(mongoclient, newWord){
 
         let result = await mongoclient.db("discordbot").collection(message.guild.id).insertOne(newWord);
@@ -1317,20 +1301,9 @@ for (var x = 0; x<5; x++){
                 let dbwords = result;
       }
   async function updateInfractions(mongoclient, nameOfListing, addpoints){
-              let userid = message.author.id;
-              let collection = message.guild.id;
-              let result = await mongoclient.db("discordbot").collection(message.guild.id)
-              .findOne({ name: userid});
-              if (result){
-                let lookup = JSON.parse(JSON.stringify(result));
-                let numofpoints = lookup.infractions;
-                let x = Number(numofpoints);
-                let updatepoints = x + addpoints;
-
-                result = await mongoclient.db("discordbot").collection(message.guild.id)
-                .updateOne({ name: nameOfListing}, {$set: {infractions: updatepoints}})
-              }
-          }
+              result = await mongoclient.db("discordbot").collection(message.guild.id)
+              .updateOne({name: nameOfListing}, { $inc: {infractions: addpoints}})
+      }
   async function findlisting(mongoclient, nameOfListing){
         let result = await mongoclient.db("discordbot").collection(message.guild.id)
         .findOne({name: nameOfListing});
@@ -1393,7 +1366,7 @@ for (var x = 0; x<5; x++){
     message.channel.send(list)
   }
   async function checkAutoKick(mongoclient, message){
-    let serverstuff = await checkStuff(mongoclient, "counting", message);
+    let serverstuff = everything
     var kickInfrac;
     var userprofile;
     if (!serverstuff.kick) return;
@@ -1404,7 +1377,6 @@ for (var x = 0; x<5; x++){
     if (result){
       userprofile = JSON.parse(JSON.stringify(result));
      }
-    //let userProfile = await checkStuff(mongoclient, message.author.id, message);
     if (Number(userprofile.infractions)>kickInfrac){
       message.channel.send("kicking this person because they reached the limit of infractions set by their admin.");
       await kick(message);
@@ -1413,7 +1385,7 @@ for (var x = 0; x<5; x++){
     }
   }
   async function checkAutoBan(mongoclient, message){
-    let serverstuff = await checkStuff(mongoclient, "counting", message);
+    let serverstuff = everything;
     var banInfrac;
     var userprofile;
     if (!serverstuff.ban) return;
@@ -1424,7 +1396,6 @@ for (var x = 0; x<5; x++){
     if (result){
       userprofile = JSON.parse(JSON.stringify(result));
      }
-    //let userProfile = await checkStuff(mongoclient, message.author.id, message);
     if (Number(userprofile.infractions)>banInfrac){
       message.channel.send("banning this person because they reached the limit of infractions set by their admin.");
       await ban(message);
@@ -2293,20 +2264,9 @@ main();
     try {
       const db = mongoclient.db("discordbot");
       async function updateInfractions(mongoclient, nameOfListing, addpoints){
-        let userid = newMessage.author.id;
-        let collection = newMessage.guild.id;
-        let result = await mongoclient.db("discordbot").collection(newMessage.guild.id)
-        .findOne({ name: userid});
-        if (result){
-          let lookup = JSON.parse(JSON.stringify(result));
-          let numofpoints = lookup.infractions;
-          let x = Number(numofpoints);
-          let updatepoints = x + addpoints;
-
-          result = await mongoclient.db("discordbot").collection(newMessage.guild.id)
-          .updateOne({ name: nameOfListing}, {$set: {infractions: updatepoints}})
-        }
-      }
+                  result = await mongoclient.db("discordbot").collection(newMessage.guild.id)
+                  .updateOne({name: nameOfListing}, { $inc: {infractions: addpoints}})
+          }
       async function findlistingbyname(mongoclient, nameOfListing){
                     let result = await mongoclient.db("discordbot").collection(newMessage.guild.id)
                     .findOne({ _id: "101"});
