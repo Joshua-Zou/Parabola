@@ -160,6 +160,8 @@ client.on("message", message => {
       { name: prefix+'disable urban', value: 'Is disabled by default, and disables the urban command that searches the urban dictionary', inline: false},
       { name: prefix+'change auto settings', value: "Changes the auto-kick/banning threshold, there isn't any by default", inline: false},
       { name: prefix+'change subreddit', value: "Changes the subreddit for the memes command. Default is cleanmemes", inline: false},
+      { name: prefix+'enable translate', value: `Enables the translate feature (${prefix}help language)`, inline: false },
+      { name: prefix+'disable translate', value: `Disable the translate feature (${prefix}help language)`, inline: false },
     )
       message.channel.send(random);
   }
@@ -495,6 +497,7 @@ var disabledChannels;
     else bans = info.ban
     if(!info.tts||info.tts === "enabled") tts = "disabled";
     else tts = "enabled";
+    if (!everything.translate) everything.translate = "enabled"
     let random = new Discord.MessageEmbed()
     .setTitle("Server settings")
     .setColor('#18492a')
@@ -506,7 +509,8 @@ var disabledChannels;
       {name: "Kicking threshold", value: kicks+" infractions", inline: true},
       {name: "Banning threshold", value: bans+" infractions", inline: true},
       {name: "Current counting channel", value: countingChannel, inline: true},
-      {name: "Current subreddit", value: subreddit, inline: true}
+      {name: "Current subreddit", value: subreddit, inline: true},
+      {name: "Translate commands", value: everything.translate}
     )
     message.channel.send(random)
   }
@@ -977,6 +981,7 @@ for (var x = 0; x<5; x++){
         	{ name: 'social credit points: ', value: dbwords.points, inline: false },
       		{ name: 'infractions:', value: dbwords.infractions, inline: false },
       	)
+        .setColor('#18492a')
           message.channel.send(random);
       }
       else{
@@ -1352,6 +1357,7 @@ try{
     let steps  = solver.solveEquation(equation);
     let random = new Discord.MessageEmbed()
       .setTitle('Here are the steps you need to do to solve your equation')
+      .setColor('#18492a')
     steps.forEach(step => {
         random.addFields({name: "Before this change: ", value: step.oldEquation.print(), inline: true})
         random.addFields({name: "Type of change: ", value: step.changeType, inline: true})
@@ -1439,6 +1445,7 @@ try{
 
       let random = new Discord.MessageEmbed()
         .setTitle('help fun menu')
+        .setColor('#18492a')
         .addFields(
         { name: prefix+'hi', value: 'displays "hi boi"', inline: true },
       	{ name: prefix+'bye', value: 'returns "bye boi"', inline: true },
@@ -1456,6 +1463,7 @@ try{
     if (message.content.toLowerCase() === prefix+"help currency"){
       let random = new Discord.MessageEmbed()
         .setTitle('help currency menu')
+        .setColor('#18492a')
         .addFields(
         { name: prefix+'bal', value: 'shows your current balance', inline: true },
     	)
@@ -1464,6 +1472,7 @@ try{
     if (message.content.toLowerCase() === prefix+"help i've"){
       let random = new Discord.MessageEmbed()
         .setTitle('help menu')
+        .setColor('#18492a')
         .addFields(
         { name: prefix+'fallen', value: "help I've fallen", inline: true },
     	)
@@ -1478,7 +1487,7 @@ try{
 
           message.channel.send({
               embed: {
-                  color: 'ORANGE',
+                  color: '#18492a',
                   author: { name: 'Help pannel' },
                   fields: [
                       { name: 'Music', value: music },
@@ -1493,6 +1502,7 @@ try{
     if (message.content.toLowerCase() === prefix+"help crypto"){
       let random = new Discord.MessageEmbed()
         .setTitle('help crypto menu')
+        .setColor('#18492a')
         .addFields(
         { name: prefix+'coin [crypto currency]', value: 'shows the current price of the crypto currency specified, along with some other stats', inline: false },
         { name: prefix+'coin details [crypto currency]', value: 'shows the developer details and in depth details of the specified coin', inline: false }
@@ -1502,6 +1512,7 @@ try{
     if (message.content.toLowerCase() === prefix+"help"){
       let random = new Discord.MessageEmbed()
         .setTitle('help menu')
+        .setColor('#18492a')
         .addFields(
         { name: 'my current prefix is: ', value: prefix, inline: false},
         { name: prefix+'help music', value: 'music bot commands', inline: true },
@@ -1521,6 +1532,7 @@ try{
         if (message.content.toLowerCase() === prefix+"help math"){
       let random = new Discord.MessageEmbed()
         .setTitle('help math menu')
+        .setColor('#18492a')
         .addFields(
         { name: 'simple operations', value: prefix+'help math simple operations', inline: true },
       	{ name: 'trigonometry', value: prefix+'help math trigonometry', inline: true },
@@ -1535,6 +1547,7 @@ try{
         if (message.content.toLowerCase() === prefix+"help math solve"){
       let random = new Discord.MessageEmbed()
         .setTitle('help math menu')
+        .setColor('#18492a')
         .addFields(
         { name: 'solve simple euations', value: prefix+'evaluate solve (x+5=10, x) first spot is the equation, second spot is the variable to solve for.', inline: true },
       	{ name: 'solve quadratic equations', value: prefix+'quadratic solve---this will then ask you what values of a, b, and c, you want in your equation', inline: true },
@@ -1545,6 +1558,7 @@ try{
         if (message.content.toLowerCase() === prefix+"help math simple operations"){
       let random = new Discord.MessageEmbed()
         .setTitle('help math simple operations menu')
+        .setColor('#18492a')
         .addFields(
       { name: 'To use these, do:', value: prefix+'solve 5*5=x, or something like that'},
       { name: 'addition', value: 'use a "plus sign" [ + ]', inline: true },
@@ -1558,6 +1572,7 @@ try{
         if (message.content.toLowerCase() === prefix+"help math trigonometry"){
       let random = new Discord.MessageEmbed()
         .setTitle('help math trigogometry menu')
+        .setColor('#18492a')
         .addFields(
       { name: 'sine', value: prefix+'evaluate sin(x)', inline: true },
       { name: 'cosine', value: prefix+'evaluate cos(x)', inline: true },
@@ -1579,6 +1594,7 @@ try{
         if (message.content.toLowerCase() === prefix+"help math hyperbolic trig"){
       let random = new Discord.MessageEmbed()
         .setTitle('help math hyperbolic trigogometry menu')
+        .setColor('#18492a')
         .addFields(
       { name: 'cosh', value: prefix+'evaluate cosh(x)', inline: true },
       { name: 'sinh', value: prefix+'evaluate sinh(x)', inline: true },
@@ -1598,6 +1614,7 @@ try{
         if (message.content.toLowerCase() === prefix+"help math math functions"){
       let random = new Discord.MessageEmbed()
         .setTitle('help math math functions menu')
+        .setColor('#18492a')
         .addFields(
       { name: 'log', value: prefix+'evaluate log(x)', inline: true },
       { name: 'log10', value: prefix+'evaluate log10(x)', inline: true },
@@ -1625,6 +1642,7 @@ try{
       { name: 'fib', value: prefix+'evaluate fib(x)', inline: true},
       )
       let random1 = new Discord.MessageEmbed()
+      .setColor('#18492a')
         .addFields(
           { name: 'tri', value: prefix+'evaluate tri(x)', inline: true},
           { name: 'line', value: prefix+'evaluate line ([x1,y1], [x2,y2])', inline: true },
@@ -1636,6 +1654,7 @@ try{
         if (message.content.toLowerCase() === prefix+"help math algebra"){
       let random = new Discord.MessageEmbed()
         .setTitle('help math algebra menu')
+        .setColor('#18492a')
         .addFields(
       { name: 'lcm', value: prefix+'evaluate lcm', inline: true },
       { name: 'gcf', value: prefix+'evaluate gcf', inline: true },
@@ -1648,6 +1667,7 @@ try{
         if (message.content.toLowerCase() === prefix+"help math calculus"){
           let random = new Discord.MessageEmbed()
             .setTitle('help math algebra menu')
+            .setColor('#18492a')
             .addFields(
           { name: 'sum', value: prefix+'evaluate sum(x+1, x, 1, 5)', inline: true },
           { name: 'product', value: prefix+'evaluate product(x+1, x, 1, 20)', inline: true },
@@ -1658,11 +1678,13 @@ try{
           message.channel.send(random);
         }
         }
-
     if (message.content.startsWith(prefix+"help language")){
       if (message.content.toLowerCase() === prefix+"help language"){
+        if (!everything.translate) everything.translate = "enabled"
       let random = new Discord.MessageEmbed()
         .setTitle('help language')
+        .setColor('#18492a')
+        .setDescription('This is currently `'+everything.translate+'` by your admin')
         .addFields(
         { name: 'translate from english', value: prefix+'translate [language code] [stuff you want to translate from english]', inline: false },
         { name: 'translate to english', value: prefix+'translate [foreign language]  translates stuff to english', inline: false },
@@ -1677,6 +1699,7 @@ try{
     if (message.content.toLowerCase() === prefix+"help covid"){
       let random = new Discord.MessageEmbed()
         .setTitle('help covid menu')
+        .setColor('#18492a')
         .addFields(
         { name: prefix+'covid', value: 'shows covid stats for the US', inline: false },
         { name: prefix+'covid [country]', value: 'shows covid stats for the specified country', inline: false },
@@ -1856,6 +1879,7 @@ try{
   let random = new Discord.MessageEmbed()
     .setTitle(data.data.name)
     .setThumbnail(data.data.image.large)
+    .setColor('#18492a')
     .addFields(
       { name: 'current price', value: "$"+data.data.market_data.current_price.usd+" usd", inline: true },
       { name: '24h low', value: "$"+data.data.market_data.low_24h.usd+ "usd", inline: true },
@@ -1912,6 +1936,7 @@ try{
       { name: "max_supply", value: maxsupply, inline: true},
       { name: "circulating supply", value: cirsupply, inline: true},
   )
+  .setColor('#18492a')
     message.channel.send(random);
   }
   }
@@ -1930,6 +1955,7 @@ try{
      let random = new Discord.MessageEmbed()
      .setTitle(cor.country+" Covid Info updated: "+lastTime)
      .setThumbnail(cor.countryInfo.flag)
+     .setColor('#18492a')
        .addFields(
          { name: "Total Cases", value: cor.cases, inline: true},
          { name: 'Total Deaths', value: cor.deaths, inline: true },
