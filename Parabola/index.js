@@ -268,9 +268,8 @@ var disabledChannels;
     .next(async function(err, collinfo){
       if (!collinfo){
         const uri = "mongodb+srv://monkey:monkey2008@cluster0.exqqa.mongodb.net/test";
-        message.channel.send("this seems to be the first time I have seen this server. To start using my features, you guys can do ~help Please note that it's NOT A DASH, it's a tilde. (you can change this later)")
         await createCollection(serverid);
-
+        message.channel.send("this seems to be the first time I have seen this server. To start using my features, you guys can do ~help Please note that it's NOT A DASH, it's a tilde. (you can change this later)")
       }
     })
     //end of signup server
@@ -1973,7 +1972,7 @@ try{
        message.channel.send(random);
    }
   }
-  if (message.content.toLowerCase() === prefix+"reset bot"||message.content.toLowerCase() === "~reset bot"){
+  if (message.content.toLowerCase() === prefix+"reset bot"){
     if (message.guild.ownerID !== message.author.id){
       message.channel.send("You have to be a server Owner to run this command");
       return;
@@ -1988,13 +1987,13 @@ try{
   let guildid = collected.first().guild.id;
   const db = mongoclient.db("discordbot");
   await mongoclient.db("discordbot").collection(guildid).drop();
-  await sleep(20000);
+  await sleep(2000);
   message.channel.send("Almost Done...");
-  await sleep(20000);
+  await sleep(2000);
   message.channel.send("Done.\n Clearing User Data...");
-  await sleep(10000);
+  await sleep(1000);
   message.channel.send('Done. Finishing Up...');
-  await sleep(5000);
+  await sleep(500);
   message.channel.send("Finished");
   }
   return;
@@ -2020,7 +2019,6 @@ try{
     message.channel.send("my prefix is: "+prefix+"\n"+prefix+"help for help");
   }
   }
-
   banned = 0;
         } catch (e) {
           console.error(e.warn);
