@@ -1295,7 +1295,7 @@ try{
   }
   if (message.content.toLowerCase().startsWith(prefix+"ban")){
     if (!message.member.hasPermission("ADMINISTRATOR")){
-      message.channel.send("you don't have enough permissions to kick people haha lol sucks to be you");
+      message.channel.send("you don't have enough permissions to ban people haha lol sucks to be you");
       return;
     }
     if (message.mentions.members.first()) {
