@@ -1227,7 +1227,8 @@ for (var x = 0; x<5; x++){
     "light theme": "https://media.discordapp.net/attachments/722953585217896560/754876761833209916/image0.gif",
     "help meth":"don't do drugs kids",
     "no u": "https://i.imgur.com/8GPN9I3.jpg",
-    "invite":"<https://discord.com/oauth2/authorize?client_id=777732217857376259&permissions=8&redirect_uri=https%3A%2F%2Fgmail.com&scope=bot>"
+    "invite":"<https://discord.com/oauth2/authorize?client_id=777732217857376259&permissions=8&redirect_uri=https%3A%2F%2Fgmail.com&scope=bot>",
+    "jemily": "kek jemily is the best and if you don't believe me then do /8ball jemily and you will see that jemily is the best and jemily is the best thing that ever happened to the world because jemily is the best (circular logic) and jemily cannot be beat by any other ship ever."
   };
   if(responseObject[message.content.toLowerCase().slice(prefixlength)]&&message.content.startsWith(prefix)){
       message.channel.send(responseObject[message.content.toLowerCase().slice(prefixlength)]);
@@ -2108,6 +2109,23 @@ client.on('messageDelete', async function(message, channel){
     }
 });
 
+while(true){
+  await sleep(5000)
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+    }
+  let x = Number(client.guilds.cache.size);
+  let y = Number(client.users.cache.size);
+  console.log(x)
+  fetch('https://discordbotlist.com/api/v1/bots/777732217857376259/stats', {
+    method: 'POST',
+    body: JSON.stringify({"guilds": x, "users": y}),
+    headers: { 'Content-Type': 'application/json', "Authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0IjoxLCJpZCI6Ijc3NzczMjIxNzg1NzM3NjI1OSIsImlhdCI6MTYxNzIyODkwOH0.H1vBmXpqFuGx4s7v7ykOIi3iodcNogEKVYJ5Um3LUH8" }
+})
+await sleep(100000)
+
+
+}
 return mongoclient;
 });
 mongoclient.close();
